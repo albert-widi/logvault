@@ -16,3 +16,5 @@ message IngestRequest {
 message IngestResponse {
     string status = 1;
 }
+
+// protoc -I pb/ pb/logvault.proto --go_out=plugins=grpc:pb

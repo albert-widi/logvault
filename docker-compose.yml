@@ -5,13 +5,27 @@ services:
         restart: unless-stopped
         volumes:
           - ./cmd/producer/logdir:/var/log/producer
-
+        # command: ["-hostname="server1",]
 
     agent:
         image: logvault_agent:latest
         restart: unless-stopped
         volumes:
           - ./cmd/producer/logdir:/var/log/producer
+        command: ["-dir=/var/log/producer", "-group=test", "-vault=logvault:9300"]
+
+    producer2:
+        image: producer:latest
+        restart: unless-stopped
+        volumes:
+          - ./cmd/producer/logdir2:/var/log/producer
+        # command: ["-hostname="server2",]
+    
+    agent2:
+        image: logvault_agent:latest
+        restart: unless-stopped
+        volumes:
+          - ./cmd/producer/logdir2:/var/log/producer
         command: ["-dir=/var/log/producer", "-group=test", "-vault=logvault:9300"]
 
     logvault:

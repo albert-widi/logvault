@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -33,7 +35,12 @@ func createDir(dir string) error {
 	return nil
 }
 
+var serverName = flag.String("hostname", "", "hostname usage")
+
 func main() {
+	flag.Parse()
+	name := *serverName
+
 	err := createDir("/var/log/producer")
 	if err != nil {
 		log.Fatal("Cannot create producer log directory")
@@ -49,8 +56,8 @@ func main() {
 		log.Fatal("Cannot create f2 ", err.Error())
 	}
 	defer f2.Close()
-	log1 := log.New(f1, "F1:", log.Ldate|log.Ltime|log.Lshortfile)
-	log2 := log.New(f2, "F2:", log.Ldate|log.Ltime|log.Lshortfile)
+	log1 := log.New(f1, fmt.Sprintf("%s:F1:", name), log.Ldate|log.Ltime|log.Lshortfile)
+	log2 := log.New(f2, fmt.Sprintf("%s:F1:", name), log.Ldate|log.Ltime|log.Lshortfile)
 
 	ticker := time.NewTicker(time.Second * 1)
 	term := make(chan os.Signal)
